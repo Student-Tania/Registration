@@ -43,22 +43,16 @@ const authRoutes = require("./routes/auth");
 app.use('/api/auth',authRoutes)
 
 //connect mongoose
-main()
-  .then(() => {
-    console.log("✅ Mongoose connected");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err.message);
-  });
-
 async function main() {
-  await mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  const db = mongoose.connection;
-  console.log("Connected to:", db.name);
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("✅ MongoDB connected:", mongoose.connection.name);
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+  }
 }
+
+main();
 
 // Start server
 const PORT = process.env.PORT || 4000;
