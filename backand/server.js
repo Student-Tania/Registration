@@ -45,19 +45,23 @@ app.use('/api/auth',authRoutes)
 //connect mongoose
 main()
   .then(() => {
-    console.log("mongoose connected");
+    console.log("✅ Mongoose connected");
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
   });
 
 async function main() {
-  await mongoose.connect(process.env.MONGO_URL);
+  await mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   const db = mongoose.connection;
   console.log("Connected to:", db.name);
 }
 
-//listening app
-app.listen(process.env.PORT,()=>{
-    console.log("server is listening")
-})
+// Start server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is listening on port ${PORT}`);
+});
